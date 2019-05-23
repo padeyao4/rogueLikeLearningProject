@@ -10,8 +10,10 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     Rigidbody2D rd2D;
     Collider2D c2D;
+    int food = 100;
 
     Animator animator;
+    int currentDirection = 1;
     void Start()
     {
         rd2D = GetComponent<Rigidbody2D>();
@@ -26,8 +28,12 @@ public class PlayerController : MonoBehaviour
 
         if (xDir != 0)
         {
-            if(canMove)
-                animator.SetBool("idle_direction", xDir > 0);
+            if (canMove)
+            {
+                currentDirection = xDir;
+                animator.SetBool("idle_direction", currentDirection > 0);
+            }
+                
         }
 
         if (xDir != 0 || yDir != 0)
@@ -54,8 +60,21 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.Log("碰到物体的名称:" + hit.transform.gameObject.tag);
+            if (hit.transform.tag == "Wall")
+            {
+                if (currentDirection > 0)
+                {
+                    animator.SetTrigger("chop_right");
+                }
+                else
+                {
+                    animator.SetTrigger("chop_left");
+                }
+            }
         }
     }
+
+
 
     private IEnumerator SmoothMovement(Vector2 end)
     {
@@ -72,10 +91,19 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    public void Treat(int add)
     {
-        Debug.Log("碰到物体的名称:" + collision.GetType().ToString());
+        food += add;
+        GameController.Instance.SetFoodText($"add {add} Food {food}");
+        Invoke("RecoverText", 2f);
     }
+
+    void RecoverText()
+    {
+        GameController.Instance.SetFoodText($"Food {food}");
+    }
+
 
     public void Move(int xDir, int yDir)
     {

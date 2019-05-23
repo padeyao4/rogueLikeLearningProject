@@ -8,10 +8,11 @@ public class GameController : MonoBehaviour
     public static GameController Instance;
     public GameObject boardManager;
     public GameObject player;
-    GameObject foodText;
+    Text foodText;
     GameObject levelImage;
     Text levelText;
 
+    int playerFood = 100; 
     private void Awake()
     {
         if (GameController.Instance == null)
@@ -20,9 +21,14 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        foodText = GameObject.Find("FoodText");
+        foodText = GameObject.Find("FoodText").GetComponent<Text>();
         levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
+    }
+
+    public void SetFoodText(string content)
+    {
+        foodText.text = content;
     }
 
     private void Start()

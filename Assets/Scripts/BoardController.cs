@@ -36,6 +36,8 @@ public class BoardController : MonoBehaviour
                 gridPosition.Add(new Vector3(i, j, 0f));
             }
         }
+        gridPosition.RemoveAt(0);
+        gridPosition.RemoveAt(gridPosition.Count-1);
     }
 
    
@@ -53,6 +55,7 @@ public class BoardController : MonoBehaviour
                 Instantiate(tilePre, new Vector3(i, j, 0f), Quaternion.identity, board.transform);
             }
         }
+        Instantiate(exitTile, new Vector3(width - 2, height - 2, 0),Quaternion.identity);
     }
 
 
